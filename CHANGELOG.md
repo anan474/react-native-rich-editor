@@ -1,4 +1,5 @@
-# 1.9.0
+# 1.9.1
+- Add `removeColorAndBackgroundColor` props on editor
 
 ### PR
 - [Use rect to update offset_y when pasting](https://github.com/wxik/react-native-rich-editor/pull/301)

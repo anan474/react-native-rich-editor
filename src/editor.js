@@ -28,6 +28,7 @@ function createHTML(options = {}) {
     cssText = '',
     initialCSSText = '',
     pasteAsPlainText = false,
+    removeColorAndBackgroundColor = false,
     pasteListener = false,
     keyDownListener = false,
     keyUpListener = false,
@@ -563,7 +564,7 @@ function createHTML(options = {}) {
             function handler() {
                 var activeTools = [];
                 for(var k in actionsHandler){
-                    const state =  Actions[k].state() 
+                    const state =  Actions[k].state()
                     if ( state ){
                         activeTools.push(typeof state === "boolean" ? k : {type: k, value: Actions[k].state()});
                     }
@@ -662,6 +663,7 @@ function createHTML(options = {}) {
             addEventListener(content, 'paste', function (e) {
                 // get text representation of clipboard
                 var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+                var htmlContent = (e.originalEvent || e).clipboardData.getData('text/html');
 
                 ${pasteListener} && postAction({type: 'CONTENT_PASTED', data: text});
                 if (${pasteAsPlainText}) {
@@ -669,6 +671,24 @@ function createHTML(options = {}) {
                     e.preventDefault();
                     // insert text manually
                     exec("insertText", text);
+                }
+                if (${removeColorAndBackgroundColor}){
+                    // cancel paste
+                    e.preventDefault();
+
+                    // transform style
+                    const bgColorRE = new RegExp(
+                      '(background-color\\s*:\\s*[^;]+;?)',
+                      'gi',
+                    );
+                    const colorRE = new RegExp('(color\\s*:\\s*[^;]+;?)', 'gi');
+
+                    htmlContent = htmlContent
+                      .replace(bgColorRE, ';')
+                      .replace(colorRE, ';').replace(/;\s*;/g, ';').replace(/style\s*=\s*""/g, 'style=""').replace(/\s*style=""/g, '');
+
+                    // insert content manually
+                    exec("insertHTML", htmlContent);
                 }
             });
             addEventListener(content, 'compositionstart', function(event){

@@ -337,6 +337,7 @@ export function Example(props: IProps) {
           onBlur={handleBlur}
           onCursorPosition={handleCursorPosition}
           pasteAsPlainText={true}
+          removeColorAndBackgroundColor={true}
         />
       </ScrollView>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>

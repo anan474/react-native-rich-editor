@@ -67,6 +67,11 @@ export interface RichEditorProps extends WebViewProps {
   pasteAsPlainText?: boolean;
 
   /**
+   * Boolean value to enable removing styling of text color and background color when pasted. The default value is false. Not work when pasteAsPlainText is true.
+   */
+  removeColorAndBackgroundColor?: boolean;
+
+  /**
    * HTML element used to insert when the user presses enter. The default value is div.
    */
   defaultParagraphSeparator?: string;
